@@ -1,97 +1,55 @@
 // Name any p5.js functions we use in `global` so Glitch can recognize them.
 /* global
- *    HSB, background, color, colorMode, createCanvas, collideRectCircle, ellipse, fill, height, keyCode, rect,
- *    strokeWeight, text, textSize, width
- *    UP_ARROW, LEFT_ARROW, RIGHT_ARROW, DOWN_ARROW
+ *    HSB, background, color, colorMode, createCanvas, ellipse, fill, height, line, mouseIsPressed,
+ *    mouseX, mouseY, rect, stroke, strokeWeight, width
  */
 
-let backgroundColor, frogX, frogY, score, lives, gameIsOver, car1X, car1Y, car1V;
+let brushHue, priorX, priorY;
 
 function setup() {
   // Canvas & color settings
-  createCanvas(500, 500);
+  createCanvas(400, 400);
   colorMode(HSB, 360, 100, 100);
-  backgroundColor = 95;
-  frogX = 250;
-  frogY = 450;
-  score = 0;
-  lives = 3;
-  gameIsOver = false;
-  car1X = 0;
-  car1Y = 100;
-  car1V = 5;
+  brushHue = 0;
+  priorX = 0;
+  priorY = 0;
+  background(95);
+  strokeWeight(6);
 }
 
 function draw() {
-  background(backgroundColor);
-  fill(60, 80, 80);
-  rect(0, 0, width, 50);
-  fill(120, 80, 80);
-  ellipse(frogX, frogY, 20);
-  moveCars();
-  drawCars();
-  checkCollisions();
-  checkWin();
-  displayScores();
+  chooseColors();
+
+  if (mouseIsPressed) {
+    // Pick one of the three behaviors below:
+    // rect(mouseX, mouseY, 15, 15); // Draw a 15 x 15 sized square at mouseX and mouseY
+    // ellipse(random(width), random(height), 30, 30);
+    line(priorX, priorY, mouseX, mouseY);
+    // line(width-priorX, height-priorY, width-mouseX, height-mouseY);
+  }
+
+  // Store the mouseX and mouseY from this frame in order to use them next
+  // frame - remember from the DVD lesson that the draw loop runs once every
+  // frame.
+  priorX = mouseX;
+  priorY = mouseY;
+}
+
+/* A function that sets the stroke and fill of our "paint brush". */
+function chooseColors() {
+  brushHue += 1;
+  if (brushHue > 359) {
+    brushHue = 0;
+  }
+  stroke(brushHue, 50, 80);
+  fill(brushHue, 50, 80);
 }
 
 function keyPressed() {
-  if (keyCode === UP_ARROW) {
-    frogY -= 10;
-  } else if (keyCode === LEFT_ARROW) {
-    frogX -= 10;
-  } else if (keyCode === RIGHT_ARROW) {
-    frogX += 10;
-  } else if (keyCode === DOWN_ARROW) {
-    frogY += 10;
-  }
+  background(95);
 }
 
-function moveCars() {
-  // Move the car...
-  car1X += car1V;
-  // and reset if it moves off screen
-  if (car1X >= width) {
-    car1X = -30;
-  }
-}
-
-function drawCars() {
-  fill(0, 80, 80);
-  rect(car1X, car1Y, 40, 30);
-}
-
-function checkCollisions() {
-  // Check for Car 1 collision, and if so...
-  if (collideRectCircle(car1X, car1Y, 40, 30, frogX, frogY, 20)) {
-    console.log("collided with Car 1");
-    // ...reset frog and subtract a life.
-    frogY = 450;
-    lives -= 1;
-  }
-  if (lives <= 0) {
-    gameIsOver = true;
-  }
-}
-
-function checkWin() {
-  if (frogY <= 50) {
-    score += 1;
-    frogY = 450;
-  }
-}
-
-function displayScores() {
-  textSize(12);
-  // Display Lives
-  fill(0);
-  text(`Lives: ${lives}`, 10, 20);
-  // Display Score
-  fill(0);
-  text(`Score: ${score}`, 10, 38);
-  // Display game over message
-  if (gameIsOver) {
-    textSize(60);
-    text("GAME OVER", 70, height/2);
-    }
-  }
+/* This is a function that we created to help debug out code! */
+// function mousePressed() {
+//   ellipse(random(width), random(height), 30, 30);
+// }

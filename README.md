@@ -1,11 +1,12 @@
-CSSI Day 7 - Frogger
+CSSI Day 4 - Rainbow Paintbrush
 =================
 
 Your Project
 ------------
+
 ### ← README.md
 
-Frog has to cross the river without being eaten by the crocodiles
+Mini paint app
 
 ### ← index.html
 

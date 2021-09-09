@@ -19,7 +19,7 @@ let brushHue,
 
 function setup() {
   // Canvas & color settings
-  createCanvas(600, 600);
+  createCanvas(600, 400);
   colorMode(HSB, 360, 100, 100);
   //rectangle
   rectColor = color(30); //outline color
